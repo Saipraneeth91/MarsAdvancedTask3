@@ -1,0 +1,2255 @@
+{
+	"info": {
+		"_postman_id": "4a928423-7140-43e6-968a-9769ef2495f1",
+		"name": "MARS API Negative Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16651456",
+		"_collection_link": "https://solar-rocket-270103.postman.co/workspace/POSTMAN-1~ac205c5b-9fdc-4b6d-8a5a-e080e85d4041/collection/16651456-4a928423-7140-43e6-968a-9769ef2495f1?action=share&source=collection_link&creator=16651456"
+	},
+	"item": [
+		{
+			"name": "UserRequestsFolder",
+			"item": [
+				{
+					"name": "Negative",
+					"item": [
+						{
+							"name": "Signup Partial Data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseBody = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Check status code is 400\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(responseBody.isSuccess).to.be.false;\r",
+											"   console.log(responseBody.message);\r",
+											"});\r",
+											"\r",
+											"var schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"isSuccess\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"isSuccess\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate schema\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.jsonSchema(schema)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"countryDialCode\": \"+64\",\r\n  \"email\": \"{{email_id}}\",\r\n  \"firstName\": \"\",\r\n  \"lastName\": \"\",\r\n  \"mobilePhone\": \"046988521\",\r\n  \"password\": \"password\",\r\n  \"terms\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{userurl}}/authentication/authentication/signup",
+									"host": [
+										"{{userurl}}"
+									],
+									"path": [
+										"authentication",
+										"authentication",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SigninInvalidCredentials",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseBody = pm.response.json();\r",
+											"pm.test(\"Check status code is 400\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(responseBody.isSuccess).to.be.false;\r",
+											"   console.log(responseBody.message);\r",
+											"});\r",
+											"\r",
+											"var schema = {\r",
+											"   \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"isSuccess\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"isSuccess\"\r",
+											"  ]\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Validate schema\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.jsonSchema(schema)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2500\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2500);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{email_id}}\",\r\n    \"password\": \"Pass\",\r\n    \"rememberMe\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{userurl}}/authentication/authentication/signin",
+									"host": [
+										"{{userurl}}"
+									],
+									"path": [
+										"authentication",
+										"authentication",
+										"signin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valid Signin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"var token = jsonData.token.token;\r",
+											"pm.globals.set(\"bearerToken\", token);\r",
+											"pm.test(\"Check status code is 200\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(200)\r",
+											"});\r",
+											"\r",
+											"var schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"isSuccess\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"token\": {\r",
+											"      \"type\": \"object\",\r",
+											"      \"properties\": {\r",
+											"        \"token\": {\r",
+											"          \"type\": \"string\"\r",
+											"        },\r",
+											"        \"expires\": {\r",
+											"          \"type\": \"number\"\r",
+											"        }\r",
+											"      },\r",
+											"      \"required\": [\r",
+											"        \"token\",\r",
+											"        \"expires\"\r",
+											"      ]\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"isSuccess\",\r",
+											"    \"token\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate schema\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.jsonSchema(schema)\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2500\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2500);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var email=\"saipraneeth@gmail.com\";\r",
+											"var Pwd=\"Password1\"\r",
+											"pm.globals.set(\"email_id\",email);\r",
+											"pm.globals.set(\"Password\",Pwd);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{email_id}}\",\r\n  \"password\": \"{{Password}}\",\r\n    \"rememberMe\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{userurl}}/authentication/authentication/signin",
+									"host": [
+										"{{userurl}}"
+									],
+									"path": [
+										"authentication",
+										"authentication",
+										"signin"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "LanguageRequest Folder",
+			"item": [
+				{
+					"name": "Negative",
+					"item": [
+						{
+							"name": "Invalid Add Language Destructive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var id = jsonData.id;\r",
+											"pm.globals.set(\"Langid\",id);\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.flase;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Language has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var LanguageSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(LanguageSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"\r",
+											"const lang = [\"Hindi\", \"Telugu\", \"English\", \"Japanese\", \"Spanish\", \"French\", \"Tamil\"];\r",
+											"const level= [\"Basic\",\"Conversational\",\"Fluent\",\"Native/Bilingual\"];\r",
+											"const randomLang= lang[Math.floor(Math.random() * lang.length)];\r",
+											"const randomLevel=level[Math.floor(Math.random() * level.length)];\r",
+											"pm.environment.set(\"AddLanguage\", randomLang);\r",
+											"console.log(\"Generated Language: \" + randomLang);\r",
+											"pm.environment.set(\"AddLevel\", randomLevel);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"level\": \"{{AddLevel}}\",\r\n  \"name\": \"{{Destructivelanguage}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addLanguage",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addLanguage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Add Language special character",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData=pm.response.json();\r",
+											"var id = jsonData.id;\r",
+											"pm.globals.set(\"invalidLangid\",id);\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Language has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var LanguageSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(LanguageSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const lang = [\"1@@\", \"2@@\", \"3@@\", \"4@@\", \"5@@\", \"6@@\", \"7@##$\"];\r",
+											"const level= [\"Basic#\",\"Conversational@\",\"Fluent#\",\"Native/Bilingual$\"];\r",
+											"const randomLang= lang[Math.floor(Math.random() * lang.length)];\r",
+											"const randomLevel=level[Math.floor(Math.random() * level.length)];\r",
+											"pm.globals.set(\"AddinvalidLanguage\", randomLang);\r",
+											"console.log(\"Add invalidLanguage : \" + randomLang);\r",
+											"pm.globals.set(\"invalidLevel\", randomLevel);\r",
+											"console.log(\"invalidLevel: \" + randomLevel);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"level\": \"{{invalidLevel}}\",\r\n  \"name\": \"{{AddinvalidLanguage}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addLanguage",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addLanguage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Add Language Blank",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData=pm.response.json();\r",
+											"var id = jsonData.id;\r",
+											"pm.globals.set(\"invalidLangid\",id);\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Language has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var LanguageSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(LanguageSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const lang = [\"1@@\", \"2@@\", \"3@@\", \"4@@\", \"5@@\", \"6@@\", \"7@##$\"];\r",
+											"const level= [\"Basic#\",\"Conversational@\",\"Fluent#\",\"Native/Bilingual$\"];\r",
+											"const randomLang= lang[Math.floor(Math.random() * lang.length)];\r",
+											"const randomLevel=level[Math.floor(Math.random() * level.length)];\r",
+											"pm.globals.set(\"AddinvalidLanguage\", randomLang);\r",
+											"console.log(\"Add invalidLanguage : \" + randomLang);\r",
+											"pm.globals.set(\"invalidLevel\", randomLevel);\r",
+											"console.log(\"invalidLevel: \" + randomLevel);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"level\": \"{{AddLevel}}\",\r\n  \"name\": \"{{}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addLanguage",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addLanguage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Add Language level Blank",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData=pm.response.json();\r",
+											"var id = jsonData.id;\r",
+											"pm.globals.set(\"invalidLangid\",id);\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.flase;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Language has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var LanguageSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(LanguageSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const lang = [\"1@@\", \"2@@\", \"3@@\", \"4@@\", \"5@@\", \"6@@\", \"7@##$\"];\r",
+											"const level= [\"Basic#\",\"Conversational@\",\"Fluent#\",\"Native/Bilingual$\"];\r",
+											"const randomLang= lang[Math.floor(Math.random() * lang.length)];\r",
+											"const randomLevel=level[Math.floor(Math.random() * level.length)];\r",
+											"pm.globals.set(\"AddinvalidLanguage\", randomLang);\r",
+											"console.log(\"Add invalidLanguage : \" + randomLang);\r",
+											"pm.globals.set(\"invalidLevel\", randomLevel);\r",
+											"console.log(\"invalidLevel: \" + randomLevel);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"level\": \"{{}}\",\r\n  \"name\": \"{{AddLanguage}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addLanguage",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addLanguage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Update Language",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Validate status code is 400\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Language has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											" var LanguageSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(LanguageSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const lang = [\"1@@\", \"2@@\", \"3@@\", \"4@@\", \"5@@\", \"6@@\", \"7@##$\"];\r",
+											"const randomLang= lang[Math.floor(Math.random() * lang.length)];\r",
+											"pm.environment.set(\"updatedinvalidLanguage\", randomLang);\r",
+											"console.log(\"updatedinvalidLanguage : \" + randomLang);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\" : \"{{invalidLangid}}\",\r\n  \"level\": \"{{invalidLevel}}\",\r\n  \"name\": \"{{updatedinvalidLanguage}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/updateLanguage",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"updateLanguage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Add Language No Authorization",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401 and response is empty\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"    pm.expect(pm.response.text()).to.be.empty;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const lang = [\"1@@\", \"2@@\", \"3@@\", \"4@@\", \"5@@\", \"6@@\", \"7@##$\"];\r",
+											"const level= [\"Basic#\",\"Conversational@\",\"Fluent#\",\"Native/Bilingual$\"];\r",
+											"const randomLang= lang[Math.floor(Math.random() * lang.length)];\r",
+											"const randomLevel=level[Math.floor(Math.random() * level.length)];\r",
+											"pm.globals.set(\"AddinvalidLanguage\", randomLang);\r",
+											"console.log(\"Add invalidLanguage : \" + randomLang);\r",
+											"pm.globals.set(\"invalidLevel\", randomLevel);\r",
+											"console.log(\"invalidLevel: \" + randomLevel);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"level\": \"{{invalidLevel}}\",\r\n  \"name\": \"{{AddinvalidLanguage}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addLanguage",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addLanguage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Delete Language",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404 and response is empty\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.expect(pm.response.text()).to.be.empty;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"{{invalidLangid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/deleteLanguage",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"deleteLanguage"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "SkillsRequestFolder",
+			"item": [
+				{
+					"name": "Negative",
+					"item": [
+						{
+							"name": "Add Skill Destructive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Skill has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var SkillSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(SkillSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"ExperienceLevel\": \"{{AddskillLevel}}\",\r\n  \"PersonSkillId\": 0,\r\n  \"Skill\": \"{{DestructiveSkill}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addSkill",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addSkill"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Add Skill Blank",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Skill has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var SkillSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(SkillSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"ExperienceLevel\": \"{{AddskillLevel}}\",\r\n  \"PersonSkillId\": 0,\r\n  \"Skill\": \"{{}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addSkill",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addSkill"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Skill Level Blank",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Skill has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var SkillSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(SkillSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"ExperienceLevel\": \"{{}}\",\r\n  \"PersonSkillId\": 0,\r\n  \"Skill\": \"{{AddSkill}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addSkill",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addSkill"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Add Skill Special Characters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData=pm.response.json();\r",
+											"var id = jsonData.id;\r",
+											"pm.globals.set(\"invalidSkillid\",id);\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Skill has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var Schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(Schema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const skill = [\"1@@\", \"2@@\", \"3@@\", \"4@@\", \"5@@\", \"6@@\", \"7@##$\"];\r",
+											"const skilllevel= [\"Beginner\",\"Intermediate\",\"Expert\"];\r",
+											"const randomSkill= skill[Math.floor(Math.random() * skill.length)];\r",
+											"const randomLevel=skilllevel[Math.floor(Math.random() * skilllevel.length)];\r",
+											"pm.globals.set(\"AddinvalidSkill\", randomSkill);\r",
+											"console.log(\"Add invalidSkill : \" + randomLevel);\r",
+											"pm.globals.set(\"invalidLevel\", randomLevel);\r",
+											"console.log(\"invalidLevel: \" + randomLevel);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"ExperienceLevel\": \"{{invalidLevel}}\",\r\n  \"PersonSkillId\": 0,\r\n  \"Skill\": \"{{AddinvalidSkill}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addSkill",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addSkill"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Add Skill No Authorization",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401 and response is empty\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"    pm.expect(pm.response.text()).to.be.empty;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const skill = [\"1@@\", \"2@@\", \"3@@\", \"4@@\", \"5@@\", \"6@@\", \"7@##$\"];\r",
+											"const skilllevel= [\"Beginner\",\"Intermediate\",\"Expert\"];\r",
+											"const randomSkill= skill[Math.floor(Math.random() * skill.length)];\r",
+											"const randomLevel=skilllevel[Math.floor(Math.random() * skilllevel.length)];\r",
+											"pm.globals.set(\"AddinvalidSkill\", randomSkill);\r",
+											"console.log(\"Add invalidSkill : \" + randomLevel);\r",
+											"pm.globals.set(\"invalidLevel\", randomLevel);\r",
+											"console.log(\"invalidLevel: \" + randomLevel);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"ExperienceLevel\": \"{{invalidLevel}}\",\r\n  \"PersonSkillId\": 0,\r\n  \"Skill\": \"{{AddinvalidSkill}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addSkill",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addSkill"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Delete Skill",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404 \", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.expect(pm.response.text()).to.be.empty;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"PersonSkillId\": \"{{NonexistingSkillid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/deleteSkill",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"deleteSkill"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "CertificationRequestFolder",
+			"item": [
+				{
+					"name": "Negative",
+					"item": [
+						{
+							"name": "Add Certification with Destructive Data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var id = jsonData.id;\r",
+											"pm.globals.set(\"Certid\",id);\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Certification has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var CertificationSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(CertificationSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const InvalidCertificate = [\"\", \"@#$%%\", \"14556325\", \"SCR_UM\"];\r",
+											"const InvalidCertYear =[\"AAAAA\",\"BBBB\",\"CCCC\",\"DDDD\"]\r",
+											"const randomCert= InvalidCertificate[Math.floor(Math.random() * InvalidCertificate.length)];\r",
+											"const randomYear= InvalidCertYear[Math.floor(Math.random()* InvalidCertYear.length)];\r",
+											"pm.globals.set(\"InvalidCertificate\", randomCert);\r",
+											"pm.globals.set(\"InvalidYear\",randomYear);\r",
+											"console.log(\"Generated InvalidCertificate: \" + randomCert);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"certificationFrom\": \"{{From}}\",\r\n  \"certificationName\": \"{{Destructivecertificate}}\",\r\n  \"certificationYear\": \"{{Year}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addCertification",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addCertification"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Certification with Blank Value",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var id = jsonData.id;\r",
+											"pm.globals.set(\"Certid\",id);\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Certification has been added successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var CertificationSchema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(CertificationSchema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const InvalidCertificate = [\"\", \"@#$%%\", \"14556325\", \"SCR_UM\"];\r",
+											"const InvalidCertYear =[\"AAAAA\",\"BBBB\",\"CCCC\",\"DDDD\"]\r",
+											"const randomCert= InvalidCertificate[Math.floor(Math.random() * InvalidCertificate.length)];\r",
+											"const randomYear= InvalidCertYear[Math.floor(Math.random()* InvalidCertYear.length)];\r",
+											"pm.globals.set(\"InvalidCertificate\", randomCert);\r",
+											"pm.globals.set(\"InvalidYear\",randomYear);\r",
+											"console.log(\"Generated InvalidCertificate: \" + randomCert);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"certificationFrom\": \"{{}}\",\r\n  \"certificationName\": \"{{}}\",\r\n  \"certificationYear\": \"{{}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addCertification",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addCertification"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ListingRequestFolder",
+			"item": [
+				{
+					"name": "Negative",
+					"item": [
+						{
+							"name": "InvalidAddListing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseBody = pm.response.json();\r",
+											"pm.collectionVariables.set(\"listingId\",responseBody.id);\r",
+											"\r",
+											"pm.test(\"Validate status code is 400\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(responseBody.success).to.be.false;\r",
+											"});\r",
+											"\r",
+											"var schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"id\": {\r",
+											"      \"type\": \"string\"\r",
+											"    },\r",
+											"    \"editFlag\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"id\",\r",
+											"    \"editFlag\"\r",
+											"  ]\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Validate schema\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.jsonSchema(schema)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"tags\": [\r\n    {\r\n      \"id\": \"\",\r\n      \"text\": \"\"\r\n    },\r\n    {\r\n      \"id\": \"\",\r\n      \"text\": \"\"\r\n    }\r\n  ],\r\n  \"availability\": {\r\n    \"dayEntries\": [\r\n      {\r\n        \"Available\": \"false\",\r\n        \"EndTime\": \"\",\r\n        \"StartTime\": \"\"\r\n      },\r\n      {\r\n        \"Available\": \"false\",\r\n        \"EndTime\": \"\",\r\n        \"StartTime\": \"\"\r\n      }\r\n    ],\r\n    \"endDate\": \"2024-06-30\",\r\n    \"startDate\": \"2024-06-08\"\r\n  },\r\n  \"categoryId\": \"6\",\r\n  \"charge\": \"4\",\r\n  \"credentials\": \"true\",\r\n  \"description\": \"\",\r\n  \"isActive\": \"true\",\r\n  \"isTradable\": \"false\",\r\n  \"locationType\": \"1\",\r\n  \"serviceType\": \"0\",\r\n  \"skillTrade\": [\r\n    {\r\n      \"id\": \"\",\r\n      \"text\": \"\"\r\n    }\r\n  ],\r\n  \"subcategoryId\": \"4\",\r\n  \"title\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{listingURL}}/listing/listing/addListing",
+									"host": [
+										"{{listingURL}}"
+									],
+									"path": [
+										"listing",
+										"listing",
+										"addListing"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ProfileRequestFolder",
+			"item": [
+				{
+					"name": "Negative",
+					"item": [
+						{
+							"name": "Invalid Addinfo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Availability updated successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var Schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"message\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"message\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(Schema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"description\": \"{{description}}\",\r\n  \"personId\": \"{{InvalidPersid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/addInfo",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"addInfo"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Update Availability",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Availability updated successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var Schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"message\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"message\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(Schema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"AvailabilityType\": \"0\",\r\n  \"AvailableHours\": \"8\",\r\n  \"EarnTarget\": \"1\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/updateAvailability",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"updateAvailability"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "InvalidName Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.test(\"Validate status code is 400\",()=>\r",
+											"{\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"pm.test(\"Check if success is false\", ()=>\r",
+											"{\r",
+											"   pm.expect(jsonData.success).to.be.false;\r",
+											"});\r",
+											" if(jsonData.success)\r",
+											" {\r",
+											"    console.log(\"Availability updated successfully\");\r",
+											" }else\r",
+											" {\r",
+											"    console.log(jsonData.message);\r",
+											" }\r",
+											"var Schema = {\r",
+											"  \"type\": \"object\",\r",
+											"  \"properties\": {\r",
+											"    \"success\": {\r",
+											"      \"type\": \"boolean\"\r",
+											"    },\r",
+											"    \"message\": {\r",
+											"      \"type\": \"string\"\r",
+											"    }\r",
+											"  },\r",
+											"  \"required\": [\r",
+											"    \"success\",\r",
+											"    \"message\"\r",
+											"  ]\r",
+											"}\r",
+											"pm.test(\"Validate response schema\", ()=>\r",
+											"{\r",
+											"    if(jsonData.success === true)\r",
+											"    {\r",
+											"       pm.response.to.have.jsonSchema(Schema);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Validate headers\", ()=>\r",
+											"{\r",
+											"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is within 2000\", ()=>\r",
+											"{\r",
+											"   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"\",\r\n  \"lastName\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{MarsURL}}/profile/profile/updateAvailability",
+									"host": [
+										"{{MarsURL}}"
+									],
+									"path": [
+										"profile",
+										"profile",
+										"updateAvailability"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "listingURL",
+			"value": "http://localhost:51689"
+		},
+		{
+			"key": "Destructivelanguage",
+			"value": "EnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglishEnglish",
+			"type": "default"
+		},
+		{
+			"key": "DestructiveSkill",
+			"value": "SeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSeleniumSelenium",
+			"type": "default"
+		},
+		{
+			"key": "firstName",
+			"value": "Sai",
+			"type": "default"
+		},
+		{
+			"key": "lastname",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "ListingId",
+			"value": "66fed71d71480f0001b308ad",
+			"type": "default"
+		},
+		{
+			"key": "NonexistingSkillid",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "emailid",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "MarsURL",
+			"value": "http://localhost:60190",
+			"type": "default"
+		},
+		{
+			"key": "listingId",
+			"value": ""
+		},
+		{
+			"key": "userurl",
+			"value": "http://localhost:60968",
+			"type": "default"
+		}
+	]
+}

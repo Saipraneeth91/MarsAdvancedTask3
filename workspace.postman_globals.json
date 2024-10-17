@@ -1,0 +1,194 @@
+{
+	"id": "2de53bfa-5015-4575-808f-c323d351a0fc",
+	"values": [
+		{
+			"key": "userurl",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "email_id",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "bearerToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "MarsURL",
+			"value": "",
+			"type": "any",
+			"enabled": false
+		},
+		{
+			"key": "reqid",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Langid",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Skillid",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Certid",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "invalidLangid",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "AddinvalidLanguage",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "invalidLevel",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "AddSkill",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "AddskillLevel",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "AddinvalidSkill",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "invalidSkillid",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "updatedinvalidSkill",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Certificate",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "From",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Year",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "InvalidCertificate",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "InvalidYear",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Password",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Destructivecertificate",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "InvalidCertid",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "description",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "Requestid",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "AddLanguage",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "AddLevel",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "listingId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "ReqId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "email",
+			"value": "saipran12345@gmail.com",
+			"type": "default"
+		}
+	],
+	"name": "Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2024-10-17T10:14:34.364Z",
+	"_postman_exported_using": "Postman/11.17.1"
+}
